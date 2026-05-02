@@ -37,9 +37,17 @@ func (s *Store) GetUserByEmail(email string) (*types.User, error) {
 	return user, nil
 }
 func (s *Store) CreateUser(user types.User) error {
+	_, err := s.db.Exec(`INSERT INTO USERS 
+	(firstName, lastName, email, password)
+	VALUES (?,?,?,?)
+	`, user.FirstName, user.LastName, user.Password, user.CreatedAt)
 
+	if err != nil {
+		return err
+	}
 	return nil
 }
+
 func (s *Store) GetUserById(id string) (*types.User, error) {
 	rows, err := s.db.Query("SELECT * FROM users where id=?", id)
 	if err != nil {
