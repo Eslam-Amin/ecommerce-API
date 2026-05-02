@@ -40,7 +40,7 @@ func (s *Store) CreateUser(user types.User) error {
 	_, err := s.db.Exec(`INSERT INTO USERS 
 	(firstName, lastName, email, password)
 	VALUES (?,?,?,?)
-	`, user.FirstName, user.LastName, user.Password, user.CreatedAt)
+	`, user.FirstName, user.LastName, user.Email, user.Password)
 
 	if err != nil {
 		return err

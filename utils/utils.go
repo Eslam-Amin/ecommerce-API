@@ -25,7 +25,7 @@ func WriteJSON(w http.ResponseWriter, status int, resBody any) error {
 }
 
 func WriteError(w http.ResponseWriter, status int, err error) {
-	WriteJSON(w, status, map[string]string{"error": err.Error()})
+	WriteJSON(w, status, map[string]any{"success": false, "error": err.Error()})
 }
 
 var Validate = validator.New()
