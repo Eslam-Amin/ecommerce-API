@@ -11,13 +11,37 @@ type Store struct {
 	db *sql.DB
 }
 
-func NewStroe(db *sql.DB) *Store {
+func NewStore(db *sql.DB) *Store {
 
-	return &Store{db}
+	return &Store{db: db}
 }
 
 func (s *Store) GetUserByEmail(email string) (*types.User, error) {
 	rows, err := s.db.Query("SELECT * FROM users where email=?", email)
+	if err != nil {
+		return nil, err
+	}
+
+	user := new(types.User)
+	for rows.Next() {
+		user, err = scanRowIntoUser(rows)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	if user.ID == 0 {
+		return nil, fmt.Errorf("user not found")
+	}
+
+	return user, nil
+}
+func (s *Store) CreateUser(user types.User) error {
+
+	return nil
+}
+func (s *Store) GetUserById(id string) (*types.User, error) {
+	rows, err := s.db.Query("SELECT * FROM users where id=?", id)
 	if err != nil {
 		return nil, err
 	}
