@@ -1,10 +1,9 @@
 package types
 
-type RegisterUserPayload struct {
-	FirstName string `json:"firstName"`
-	LastName  string `json:"lastName"`
-	Email     string `json:"email"`
-	Password  string `json:"password"`
+type UserStore interface {
+	GetUserByEmail(email string) (*User, error)
+	GetUserById(id string) (*User, error)
+	CreateUser(User) error
 }
 
 type User struct {
@@ -14,4 +13,11 @@ type User struct {
 	Email     string `json:"email"`
 	Password  string `json:"password"`
 	CreatedAt string `json:"created_at"`
+}
+
+type RegisterUserPayload struct {
+	FirstName string `json:"firstName" validate:"required"`
+	LastName  string `json:"lastName" validate:"required"`
+	Email     string `json:"email" validate:"required,email"`
+	Password  string `json:"password" validate:"required,min=3,max=130"`
 }
