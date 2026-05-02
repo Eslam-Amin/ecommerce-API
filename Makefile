@@ -9,7 +9,10 @@ run: build
 
 migration:
 	@migrate create -ext sql -dir cmd/migrations ${filter-out $@,$(MAKECMDGOALS)}
-	
+			
+# migration-name:
+# 	@migrate create -ext sql -dir cmd/migrations $(name)
+
 migrate-up:
 	@go run cmd/migrate/main.go up 
 
