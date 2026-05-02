@@ -64,6 +64,9 @@ func (h *Handler) handleRegister(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.WriteJSON(w, http.StatusCreated, nil)
+	utils.WriteJSON(w, http.StatusCreated, types.ResponseBody{
+		Success: true,
+		Message: "account created successfully",
+	})
 
 }

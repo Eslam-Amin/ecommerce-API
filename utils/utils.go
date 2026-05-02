@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/Eslam-Amin/ecommerce/types"
 	"github.com/go-playground/validator/v10"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -17,15 +18,23 @@ func ParseJSON(r *http.Request, payload any) error {
 	return json.NewDecoder(r.Body).Decode(payload)
 }
 
-func WriteJSON(w http.ResponseWriter, status int, resBody any) error {
+func WriteJSON(w http.ResponseWriter, status int, resBody types.ResponseBody) error {
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(status)
 
-	return json.NewEncoder(w).Encode(resBody)
+	return json.NewEncoder(w).Encode(types.ResponseBody{
+		Success: resBody.Success,
+		Message: resBody.Message,
+		Data:    resBody.Data,
+		Error:   resBody.Error,
+	})
 }
 
 func WriteError(w http.ResponseWriter, status int, err error) {
-	WriteJSON(w, status, map[string]any{"success": false, "error": err.Error()})
+	WriteJSON(w, status, types.ResponseBody{
+		Success: false,
+		Error:   err.Error(),
+	})
 }
 
 var Validate = validator.New()
