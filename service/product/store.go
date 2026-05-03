@@ -29,7 +29,10 @@ func (s *Store) CreateProduct(product types.Product) error {
 }
 
 func (s *Store) GetProducts() ([]types.Product, error) {
-	rows, err := s.db.Query("Select * from products")
+	rows, err := s.db.Query(`
+	SELECT id, name, description, image, price, quantity, createdAt
+	FROM products
+`)
 	if err != nil {
 		return nil, err
 	}
