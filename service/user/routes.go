@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/Eslam-Amin/ecommerce/config"
 	"github.com/Eslam-Amin/ecommerce/service/auth"
 	"github.com/Eslam-Amin/ecommerce/types"
 	"github.com/Eslam-Amin/ecommerce/utils"
@@ -54,9 +55,18 @@ func (h *Handler) handleLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	secret := []byte(config.Envs.JWTSecret)
+	token, err := auth.CreateJWT(secret, user.ID)
+
+	if err != nil {
+		utils.WriteError(w, http.StatusInternalServerError, err)
+		return
+	}
+
 	utils.WriteJSON(w, http.StatusCreated, types.ResponseBody{
 		Success: true,
 		Message: "account logged-in successfully",
+		Data:    token,
 	})
 }
 
