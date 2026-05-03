@@ -79,6 +79,15 @@ func (s *Store) GetProductsByIds(productIds []int) ([]types.Product, error) {
 	return products, nil
 }
 
+func (s *Store) UpdateProduct(product types.Product) error {
+	_, err := s.db.Exec(`
+	UPDATE products SET name = ?, description= ?, price=?, image=?, quantity=? where id=?`,
+		product.Name, product.Description, product.Price, product.Image, product.Quantity, product.ID,
+	)
+
+	return err
+}
+
 func scanRowsIntoProduct(rows *sql.Rows) (*types.Product, error) {
 	product := new(types.Product)
 
