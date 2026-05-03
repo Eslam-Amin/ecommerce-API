@@ -22,10 +22,7 @@ func (s *Store) CreateProduct(product types.Product) error {
 	(name, description, image, price, quantity)
 	VALUES (?,?,?,?,?)
 	`, product.Name, product.Description, product.Image, product.Price, product.Quantity)
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }
 
 func (s *Store) GetProducts() ([]types.Product, error) {
