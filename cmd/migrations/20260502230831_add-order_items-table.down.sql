@@ -1,0 +1,1 @@
+DROP TABLE IF EXSITS order_items;
