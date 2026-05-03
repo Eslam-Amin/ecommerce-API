@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/Eslam-Amin/ecommerce/service/auth"
 	"github.com/Eslam-Amin/ecommerce/types"
 	"github.com/Eslam-Amin/ecommerce/utils"
 	"github.com/go-playground/validator/v10"
@@ -47,7 +48,7 @@ func (h *Handler) handleLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = utils.ComparePasswords(user.Password, payload.Password)
+	err = auth.ComparePasswords(user.Password, payload.Password)
 	if err != nil {
 		utils.WriteError(w, http.StatusUnauthorized, fmt.Errorf("invalid credentials"))
 		return
@@ -78,7 +79,7 @@ func (h *Handler) handleRegister(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	hashedPassword, err := utils.HashPassword(payload.Password)
+	hashedPassword, err := auth.HashPassword(payload.Password)
 	if err != nil {
 		utils.WriteError(w, http.StatusInternalServerError, err)
 		return

@@ -7,7 +7,6 @@ import (
 
 	"github.com/Eslam-Amin/ecommerce/types"
 	"github.com/go-playground/validator/v10"
-	"golang.org/x/crypto/bcrypt"
 )
 
 func ParseJSON(r *http.Request, payload any) error {
@@ -38,15 +37,3 @@ func WriteError(w http.ResponseWriter, status int, err error) {
 }
 
 var Validate = validator.New()
-
-func HashPassword(password string) (string, error) {
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-	if err != nil {
-		return "", err
-	}
-	return string(hashedPassword), nil
-}
-
-func ComparePasswords(hashedPassword string, password string) error {
-	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
-}
