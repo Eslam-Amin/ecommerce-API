@@ -1,6 +1,7 @@
 package product
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/Eslam-Amin/ecommerce/types"
@@ -22,7 +23,37 @@ func (h *Handler) RegisterRoutes(router *mux.Router) {
 }
 
 func (h *Handler) handleCreateProduct(w http.ResponseWriter, r *http.Request) {
+	var payload types.CreateProductPayload
+	err := utils.ParseJSON(r, &payload)
+	if err != nil {
+		utils.WriteError(w, http.StatusBadRequest, err)
+		return
+	}
 
+	errors := utils.Validate.Struct(payload)
+	if errors != nil {
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("invalid payload %v", errors))
+		return
+	}
+	product := types.Product{
+		Name:        payload.Name,
+		Description: payload.Description,
+		Image:       payload.Image,
+		Price:       payload.Price,
+		Quantity:    payload.Quantity,
+	}
+	err = h.store.CreateProduct(product)
+
+	if err != nil {
+		utils.WriteError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	utils.WriteJSON(w, http.StatusCreated, types.ResponseBody{
+		Success: true,
+		Message: "Product Created Successfully",
+		Data:    product,
+	})
 }
 
 func (h *Handler) handleGetProducts(w http.ResponseWriter, r *http.Request) {
