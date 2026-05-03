@@ -10,7 +10,9 @@ type UserStore interface {
 
 type ProductStore interface {
 	GetProducts() ([]Product, error)
-	CreateProduct(Product) error
+	GetProductsByIds(pIds []int) ([]Product, error)
+	CreateProduct(Product)
+	UpdateProduct(Product) error
 }
 
 type OrderStore interface {
@@ -73,6 +75,15 @@ type CreateProductPayload struct {
 	Image       string  `json:"image" validate:"required"`
 	Price       float64 `json:"price" validate:"required"`
 	Quantity    int     `json:"quantity" validate:"required"`
+}
+
+type CartItem struct {
+	ProductId int `json:"productId"`
+	Quantity  int `json:"quantity"`
+}
+
+type CartCheckoutPayload struct {
+	Items []CartItem `json:"items" validate:"required"`
 }
 
 type ResponseBody struct {
