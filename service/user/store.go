@@ -45,7 +45,7 @@ func (s *Store) CreateUser(user types.User) error {
 	return err
 }
 
-func (s *Store) GetUserById(id string) (*types.User, error) {
+func (s *Store) GetUserById(id int) (*types.User, error) {
 	rows, err := s.db.Query("SELECT * FROM users where id=?", id)
 	if err != nil {
 		return nil, err
