@@ -44,7 +44,7 @@ func (h *Handler) handleCheckout(w http.ResponseWriter, r *http.Request) {
 
 	products, err := h.productStore.GetProductsByIds(productIds)
 	if err != nil {
-		utils.WriteError(w, http.StatusInternalServerError, err)
+		utils.WriteError(w, http.StatusBadRequest, err)
 		return
 	}
 
