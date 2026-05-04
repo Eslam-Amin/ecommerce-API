@@ -42,13 +42,10 @@ func (s *Store) CreateUser(user types.User) error {
 	VALUES (?,?,?,?)
 	`, user.FirstName, user.LastName, user.Email, user.Password)
 
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }
 
-func (s *Store) GetUserById(id string) (*types.User, error) {
+func (s *Store) GetUserById(id int) (*types.User, error) {
 	rows, err := s.db.Query("SELECT * FROM users where id=?", id)
 	if err != nil {
 		return nil, err

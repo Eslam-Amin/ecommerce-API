@@ -1,9 +1,56 @@
 package types
 
+import (
+	"time"
+)
+
+type ProductMap map[int]Product
+type Data map[string]any
+
 type UserStore interface {
 	GetUserByEmail(email string) (*User, error)
-	GetUserById(id string) (*User, error)
+	GetUserById(id int) (*User, error)
 	CreateUser(User) error
+}
+
+type ProductStore interface {
+	GetProducts() ([]Product, error)
+	GetProductsByIds(pIds []int) ([]Product, error)
+	CreateProduct(Product) error
+	UpdateProduct(Product) error
+}
+
+type OrderStore interface {
+	CreateOrder(Order) (int, error)
+	CreateOrderItem(OrderItem) error
+}
+
+type Product struct {
+	ID          int       `json:"id"`
+	Name        string    `json:"name"`
+	Description string    `json:"description"`
+	Image       string    `json:"image"`
+	Price       float64   `json:"price"`
+	Quantity    int       `json:"quantity"`
+	CreatedAt   time.Time `json:"createdAt"`
+}
+
+type Order struct {
+	ID        int       `json:"id"`
+	UserId    int       `json:"userId"`
+	Total     float64   `json:"total"`
+	Status    string    `json:"status"`
+	Address   string    `json:"address"`
+	CreatedAt time.Time `json:"createdAt"`
+}
+
+type OrderItem struct {
+	ID        int       `json:"id"`
+	OrderId   int       `json:"orderId"`
+	ProductId int       `json:"productId"`
+	Quantity  int       `json:"quantity"`
+	Price     float64   `json:"price"`
+	CreatedAt time.Time `json:"createdAt"`
 }
 
 type User struct {
@@ -25,6 +72,23 @@ type RegisterUserPayload struct {
 type LoginUserPayload struct {
 	Email    string `json:"email" validate:"required,email"`
 	Password string `json:"password" validate:"required,min=3,max=130"`
+}
+
+type CreateProductPayload struct {
+	Name        string  `json:"name" validate:"required"`
+	Description string  `json:"description" validate:"required"`
+	Image       string  `json:"image" validate:"required"`
+	Price       float64 `json:"price" validate:"required"`
+	Quantity    int     `json:"quantity" validate:"required"`
+}
+
+type CartItem struct {
+	ProductId int `json:"productId"`
+	Quantity  int `json:"quantity"`
+}
+
+type CartCheckoutPayload struct {
+	Items []CartItem `json:"items" validate:"required"`
 }
 
 type ResponseBody struct {
