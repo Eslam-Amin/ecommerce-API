@@ -1,6 +1,11 @@
 package types
 
-import "time"
+import (
+	"time"
+)
+
+type ProductMap map[int]Product
+type Data map[string]any
 
 type UserStore interface {
 	GetUserByEmail(email string) (*User, error)
