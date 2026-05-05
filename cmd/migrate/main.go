@@ -13,7 +13,7 @@ import (
 )
 
 func main() {
-	db, err := db.NewMySQLStorate(mysql.Config{
+	db, err := db.NewMySQLStore(mysql.Config{
 		User:                 config.Envs.DBUser,
 		Passwd:               config.Envs.DBPassword,
 		Addr:                 config.Envs.DBAddress,
